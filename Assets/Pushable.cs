@@ -10,4 +10,9 @@ public class Pushable : MonoBehaviour {
 
         this.rigidBody2D.AddForce(deltaPos.normalized * force);
     }
+
+    public void Capture() {
+        Debug.Log("Captured");
+        GameObject.Destroy(this.gameObject);
+    }
 }

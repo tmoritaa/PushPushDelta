@@ -38,8 +38,15 @@ public class PushObject : MonoBehaviour {
     }
 
     private void PushObjects() {
-        foreach(Pushable p in this.objectsToPush) {
-            p.Push(this.gameObject.transform.localPosition, this.pushForce);
+        float deltaTime = Time.time - this.startTime;
+        float ratio = deltaTime / this.targetTimeDuration;
+
+        if (ratio > 1.0f) {
+            ratio = 1.0f - (ratio - 1.0f);
+        }
+
+        foreach (Pushable p in this.objectsToPush) {
+            p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
         }
 
         this.objectsToPush.Clear();
