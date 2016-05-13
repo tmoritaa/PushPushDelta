@@ -17,8 +17,6 @@ public class Spawner : MonoBehaviour {
 
     private float durSinceLastSpawn = 0;
 
-    private GameObject monstersRoot = null;
-
     private void Spawn() {
         // TODO: Normally pick randomly, for now just first.
         Pushable spawnPrefab = this.spawnPrefabs[0];
@@ -30,15 +28,13 @@ public class Spawner : MonoBehaviour {
 
         Pushable spawned = GameObject.Instantiate<Pushable>(spawnPrefab);
         spawned.transform.localPosition = randPos;
-        spawned.transform.SetParent(this.monstersRoot.transform);
+        spawned.transform.SetParent(this.transform);
 
         this.durSinceLastSpawn = 0;
     }
 
 	// Use this for initialization
 	void Start () {
-        this.monstersRoot = GameObject.Find("MonstersRoot");
-
 	    for (int i = 0; i < this.initialSpawn; ++i) {
             this.Spawn();
         }

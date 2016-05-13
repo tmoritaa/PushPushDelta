@@ -12,7 +12,7 @@ public class NetObject : MonoBehaviour {
 
         this.objToCapture.Clear();
     }
-
+    
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Pushable") {
             this.objToCapture.Add(other.GetComponent<Pushable>());

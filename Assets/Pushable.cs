@@ -17,6 +17,9 @@ public class Pushable : MonoBehaviour {
     [SerializeField]
     protected float linearDrag = 10.0f;
 
+    [SerializeField]
+    protected int score = 1;
+
     protected float lastMoveTime = 0.0f;
 
     protected Vector2 pushForce;
@@ -38,7 +41,7 @@ public class Pushable : MonoBehaviour {
     }
 
     public void Capture() {
-        Debug.Log("Captured");
+        GameManager.instance.AddScore(this.score);
         GameObject.Destroy(this.gameObject);
     }
 
