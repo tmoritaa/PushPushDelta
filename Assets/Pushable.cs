@@ -26,6 +26,8 @@ public class Pushable : MonoBehaviour {
 
     protected bool destroy = false;
 
+    protected Animator animator;
+
     protected enum PushedState {
         Unpushed,
         ReadyToPush,
@@ -48,6 +50,7 @@ public class Pushable : MonoBehaviour {
     }
 
     protected void ReadyObjectToMove() {
+        this.SetAnimTrigger("Idle");
         this.pushedState = PushedState.Unpushed;
     }
 
@@ -61,9 +64,21 @@ public class Pushable : MonoBehaviour {
         this.rigidBody2D.velocity = moveVec.normalized * this.moveVelMag;
 
         this.lastMoveTime = Time.time;
+
+        this.SetAnimTrigger("Walk");
+    }
+
+    public int GetCharDirForAnim() {
+        return (this.rigidBody2D.velocity.x >= 0) ? -1 : 1;
+    }
+
+    protected void SetAnimTrigger(string name) {
+        this.animator.SetTrigger(name);
     }
 
     protected void Start() {
+        this.animator = this.GetComponent<Animator>();
+
         this.ReadyObjectToMove();
         this.PerformMove();
     }
@@ -76,6 +91,7 @@ public class Pushable : MonoBehaviour {
                 this.rigidBody2D.drag = this.linearDrag;
                 this.rigidBody2D.AddForce(this.pushForce);
                 this.lastMoveTime = 0;
+                this.SetAnimTrigger("Pushed");
                 break;
             case PushedState.Unpushed:
                 this.rigidBody2D.drag = 0;
