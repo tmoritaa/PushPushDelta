@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour {
     [SerializeField]
-    private List<MonsterSpawnProbEntry> spawnPrefabs;
+    private List<MonsterSpawnProbEntry> spawnPrefabList;
 
     [SerializeField]
     private int initialSpawn = 20;
@@ -18,8 +18,16 @@ public class Spawner : MonoBehaviour {
     private float durSinceLastSpawn = 0;
 
     private void Spawn() {
-        // TODO: Normally pick randomly, for now just first.
-        Monster spawnPrefab = this.spawnPrefabs[0].monster;
+        int rand = Random.Range(0, 100);
+        Monster spawnPrefab = this.spawnPrefabList[0].monster;
+        int selectCounter = 0;
+        foreach (MonsterSpawnProbEntry entry in this.spawnPrefabList) {
+            selectCounter += entry.probability;
+            if (rand < selectCounter) {
+                spawnPrefab = entry.monster;
+                break;
+            }
+        }
 
         float xDim = this.spawnDimension.x / 2;
         float yDim = this.spawnDimension.y / 2;
