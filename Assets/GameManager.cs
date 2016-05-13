@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 
@@ -52,7 +53,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void EndGame() {
-        Debug.Log("Game Ended");
+        SceneTransitionData.Instance.data.Add(this.curScore);
+        SceneManager.LoadScene("Result");
     }
 
     private void UpdateTimer() {
