@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ResultSceneController : MonoBehaviour {
     [SerializeField]
@@ -8,8 +10,12 @@ public class ResultSceneController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        int score = (int)SceneTransitionData.Instance.data[0];
-
+        List<object> data = SceneTransitionData.Instance.RetrieveData();
+        int score = (int)data[0];
         resultText.text = "You scored " + score + " points";
-	}
+    }
+
+    public void GoToLevelSelect() {
+        SceneManager.LoadScene("LevelSelect");
+    }
 }

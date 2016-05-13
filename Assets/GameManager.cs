@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void EndGame() {
-        SceneTransitionData.Instance.data.Add(this.curScore);
+        SceneTransitionData.Instance.AddDataObj(this.curScore);
         SceneManager.LoadScene("Result");
     }
 
