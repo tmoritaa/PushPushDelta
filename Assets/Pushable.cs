@@ -24,6 +24,8 @@ public class Pushable : MonoBehaviour {
 
     protected Vector2 pushForce;
 
+    protected bool destroy = false;
+
     protected enum PushedState {
         Unpushed,
         ReadyToPush,
@@ -42,7 +44,7 @@ public class Pushable : MonoBehaviour {
 
     public void Capture() {
         GameManager.instance.AddScore(this.score);
-        GameObject.Destroy(this.gameObject);
+        this.destroy = true;
     }
 
     protected void ReadyObjectToMove() {
@@ -88,6 +90,12 @@ public class Pushable : MonoBehaviour {
 
         if (this.pushedState == PushedState.Unpushed && (Time.time - this.lastMoveTime) >= this.moveDuration) {
             this.PerformMove();
+        }
+    }
+
+    protected void LateUpdate() {
+        if (this.destroy) {
+            GameObject.Destroy(this.gameObject);
         }
     }
 }

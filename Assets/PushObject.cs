@@ -46,7 +46,9 @@ public class PushObject : MonoBehaviour {
         }
 
         foreach (Pushable p in this.objectsToPush) {
-            p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
+            if (p != null) {
+                p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
+            }
         }
 
         this.objectsToPush.Clear();
@@ -57,7 +59,7 @@ public class PushObject : MonoBehaviour {
         this.UpdateGraphics();
 
         if (this.destroyCounter != 0) {
-            if (this.destroyCounter > 3) {
+            if (this.destroyCounter == 3) {
                 this.colliderComponent.enabled = false;
                 this.destroyCounter = 0;
                 this.PushObjects();
