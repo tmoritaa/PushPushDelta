@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour {
     [SerializeField]
-    private List<Pushable> spawnPrefabs;
+    private List<MonsterSpawnProbEntry> spawnPrefabs;
 
     [SerializeField]
     private int initialSpawn = 20;
@@ -19,14 +19,14 @@ public class Spawner : MonoBehaviour {
 
     private void Spawn() {
         // TODO: Normally pick randomly, for now just first.
-        Pushable spawnPrefab = this.spawnPrefabs[0];
+        Monster spawnPrefab = this.spawnPrefabs[0].monster;
 
         float xDim = this.spawnDimension.x / 2;
         float yDim = this.spawnDimension.y / 2;
 
         Vector3 randPos = new Vector3(Random.Range(-xDim, xDim), Random.Range(-yDim, yDim)) + this.transform.position;
 
-        Pushable spawned = GameObject.Instantiate<Pushable>(spawnPrefab);
+        Monster spawned = GameObject.Instantiate<Monster>(spawnPrefab);
         spawned.transform.localPosition = randPos;
         spawned.transform.SetParent(this.transform);
 

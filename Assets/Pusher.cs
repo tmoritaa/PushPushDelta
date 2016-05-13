@@ -16,7 +16,7 @@ public class Pusher : MonoBehaviour {
     [SerializeField]
     private float pushForce = 50000;
 
-    private List<Pushable> objectsToPush = new List<Pushable>();
+    private List<Monster> objectsToPush = new List<Monster>();
 
     private float startTime;
 
@@ -45,7 +45,7 @@ public class Pusher : MonoBehaviour {
             ratio = 1.0f - (ratio - 1.0f);
         }
 
-        foreach (Pushable p in this.objectsToPush) {
+        foreach (Monster p in this.objectsToPush) {
             if (p != null) {
                 p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
             }
@@ -77,7 +77,7 @@ public class Pusher : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Pushable") {
-            this.objectsToPush.Add(other.GetComponent<Pushable>());
+            this.objectsToPush.Add(other.GetComponent<Monster>());
         }
     }
 }

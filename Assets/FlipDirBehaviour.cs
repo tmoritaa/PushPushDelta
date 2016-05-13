@@ -10,7 +10,7 @@ public class FlipDirBehaviour : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Pushable pushable = animator.GetComponent<Pushable>();
+        Monster pushable = animator.GetComponent<Monster>();
         Vector3 scale = pushable.transform.localScale;
         scale.x = Mathf.Abs(scale.x) * pushable.GetCharDirForAnim();
         pushable.transform.localScale = scale;

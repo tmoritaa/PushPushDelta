@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NetObject : MonoBehaviour {
-    List<Pushable> objToCapture = new List<Pushable>();
+    List<Monster> objToCapture = new List<Monster>();
 
     [SerializeField]
     private float cooldownDuration = 1;
@@ -19,7 +19,7 @@ public class NetObject : MonoBehaviour {
             return;
         }
 
-        foreach(Pushable p in this.objToCapture) {
+        foreach(Monster p in this.objToCapture) {
             p.Capture();
         }
 
@@ -32,13 +32,13 @@ public class NetObject : MonoBehaviour {
     
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Pushable") {
-            this.objToCapture.Add(other.GetComponent<Pushable>());
+            this.objToCapture.Add(other.GetComponent<Monster>());
         }
     }
 
     void OnTriggerExit2D(Collider2D other) {
         if (other.tag == "Pushable") {
-            this.objToCapture.Remove(other.GetComponent<Pushable>());
+            this.objToCapture.Remove(other.GetComponent<Monster>());
         }
     }
 

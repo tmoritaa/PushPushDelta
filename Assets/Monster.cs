@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pushable : MonoBehaviour {
+public class Monster : MonoBehaviour {
     [SerializeField]
     protected Rigidbody2D rigidBody2D = null;
 
