@@ -6,7 +6,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
     [SerializeField]
-    private PushObject pushObjectPrefab = null;
+    private Pusher pusherPrefab = null;
 
     [SerializeField]
     private Text scoreText = null;
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void GeneratePushCircle() {
-        PushObject obj = GameObject.Instantiate<PushObject>(this.pushObjectPrefab);
+        Pusher obj = GameObject.Instantiate<Pusher>(this.pusherPrefab);
         obj.transform.position = Input.mousePosition;
         obj.transform.SetParent(this.pushRoot.transform);
     }
