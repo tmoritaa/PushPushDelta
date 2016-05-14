@@ -57,7 +57,6 @@ public abstract class Monster : MonoBehaviour {
         this.pushForce = deltaPos.normalized * force;
 
         this.readyToPush = true;
-        this.state = State.Pushed;
     }
 
     public void Capture() {
@@ -110,7 +109,6 @@ public abstract class Monster : MonoBehaviour {
         this.rigidBody2D.velocity = new Vector2(0, 0);
         this.SetAnimTrigger("Idle");
         this.state = State.Idle;
-        this.readyToPush = false;
     }
 
     protected virtual void MoveToBreakState() {
@@ -168,11 +166,11 @@ public abstract class Monster : MonoBehaviour {
 
     protected void FixedUpdate() {
         if (this.readyToPush) {
+            this.MoveToPushedState();
             this.rigidBody2D.velocity = new Vector2(0, 0);
             this.rigidBody2D.drag = this.linearDrag;
             this.rigidBody2D.AddForce(this.pushForce);
             this.readyToPush = false;
-            this.MoveToPushedState();
         } else if (this.state != State.Pushed) {
             this.rigidBody2D.drag = 0;
         }
