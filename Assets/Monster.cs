@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Monster : MonoBehaviour {
+public abstract class Monster : MonoBehaviour {
     [SerializeField]
     protected Rigidbody2D rigidBody2D = null;
 
@@ -9,7 +9,10 @@ public class Monster : MonoBehaviour {
     protected float moveVelMag = 5.0f;
 
     [SerializeField]
-    protected float moveDuration = 5.0f;
+    protected float moveDuration = 1.0f;
+    public float MoveDuration {
+        get { return this.moveDuration; }
+    }
 
     [SerializeField]
     protected float minMoveMag = 2.0f;
@@ -20,6 +23,11 @@ public class Monster : MonoBehaviour {
     [SerializeField]
     protected int score = 1;
 
+    [SerializeField]
+    protected float breakDuration = 0;
+
+    protected float breakStartTime = 0;
+
     protected float lastMoveTime = 0.0f;
 
     protected Vector2 pushForce;
@@ -28,20 +36,28 @@ public class Monster : MonoBehaviour {
 
     protected Animator animator;
 
-    protected enum PushedState {
-        Unpushed,
-        ReadyToPush,
+    protected enum State {
+        Idle,
+        Walk,
+        Break,
         Pushed,
     };
 
-    protected PushedState pushedState = PushedState.Unpushed;
+    protected State state = State.Idle;
+
+    bool readyToPush = false;
 
 	public void Push(Vector3 pushStartPos, float force) {
+        if (!CanBePushed()) {
+            return;
+        }
+
         Vector2 deltaPos = this.gameObject.transform.localPosition - pushStartPos;
 
         this.pushForce = deltaPos.normalized * force;
 
-        this.pushedState = PushedState.ReadyToPush;
+        this.readyToPush = true;
+        this.state = State.Pushed;
     }
 
     public void Capture() {
@@ -49,12 +65,18 @@ public class Monster : MonoBehaviour {
         this.destroy = true;
     }
 
-    protected void ReadyObjectToMove() {
-        this.SetAnimTrigger("Idle");
-        this.pushedState = PushedState.Unpushed;
+    public int GetCharDirForAnim() {
+        int res = 0;
+        if (this.rigidBody2D.velocity.x > 0) {
+            res = -1;
+        } else if (this.rigidBody2D.velocity.x < 0) {
+            res = 1;
+        }
+
+        return res;
     }
 
-    protected void PerformMove() {
+    protected virtual void PerformMove() {
         float angle = Random.Range(0.0f, Mathf.PI * 2.0f);
         Vector2 moveVec = new Vector2(1, 0);
 
@@ -62,50 +84,97 @@ public class Monster : MonoBehaviour {
         moveVec.y = moveVec.x * Mathf.Sin(angle) + moveVec.y * Mathf.Cos(angle);
 
         this.rigidBody2D.velocity = moveVec.normalized * this.moveVelMag;
-
-        this.lastMoveTime = Time.time;
-
-        this.SetAnimTrigger("Walk");
     }
 
-    public int GetCharDirForAnim() {
-        return (this.rigidBody2D.velocity.x >= 0) ? -1 : 1;
+    protected virtual bool CanBePushed() {
+        return true;
     }
 
     protected void SetAnimTrigger(string name) {
         this.animator.SetTrigger(name);
     }
 
-    protected void Start() {
+    protected virtual void Start() {
         this.animator = this.GetComponent<Animator>();
 
-        this.ReadyObjectToMove();
+        this.MoveToIdleState();
+    }
+
+    protected virtual void MoveToPushedState() {
+        this.state = State.Pushed;
+        this.lastMoveTime = 0;
+        this.SetAnimTrigger("Pushed");
+    }
+
+    protected virtual void MoveToIdleState() {
+        this.rigidBody2D.velocity = new Vector2(0, 0);
+        this.SetAnimTrigger("Idle");
+        this.state = State.Idle;
+        this.readyToPush = false;
+    }
+
+    protected virtual void MoveToBreakState() {
+        this.rigidBody2D.velocity = new Vector2(0, 0);
+        this.SetAnimTrigger("Idle");
+        this.state = State.Break;
+        this.breakStartTime = Time.time;
+    }
+
+    protected virtual void MoveToWalkState() {
+        this.state = State.Walk;
+        this.lastMoveTime = Time.time;
+        this.SetAnimTrigger("Walk");
         this.PerformMove();
     }
 
-    protected void FixedUpdate() {
-        switch (this.pushedState) {
-            case PushedState.ReadyToPush:
-                this.rigidBody2D.velocity = new Vector2(0, 0);
-                this.pushedState = PushedState.Pushed;
-                this.rigidBody2D.drag = this.linearDrag;
-                this.rigidBody2D.AddForce(this.pushForce);
-                this.lastMoveTime = 0;
-                this.SetAnimTrigger("Pushed");
-                break;
-            case PushedState.Unpushed:
-                this.rigidBody2D.drag = 0;
-                break;
+    protected virtual void HandleIdle() {
+        this.MoveToWalkState();
+    }
+
+    protected virtual void HandleWalk() {
+        if ((Time.time - this.lastMoveTime) >= this.moveDuration) {
+            this.MoveToBreakState();
+        }
+    }
+
+    protected virtual void HandleBreak() {
+        if ((Time.time - this.breakStartTime) >= this.breakDuration) {
+            this.MoveToIdleState();
+        }
+    }
+
+    protected virtual void HandlePushed() {
+        if (this.rigidBody2D.velocity.magnitude <= this.minMoveMag) {
+            this.MoveToIdleState();
         }
     }
 
     protected void Update() {
-        if (this.rigidBody2D.velocity.magnitude <= this.minMoveMag) {
-            this.ReadyObjectToMove();
+        switch(this.state) {
+            case State.Idle:
+                this.HandleIdle();
+                break;
+            case State.Walk:
+                this.HandleWalk();
+                break;
+            case State.Break:
+                this.HandleBreak();
+                break;
+            case State.Pushed:
+                this.HandlePushed();
+                break;
         }
+    }
 
-        if (this.pushedState == PushedState.Unpushed && (Time.time - this.lastMoveTime) >= this.moveDuration) {
-            this.PerformMove();
+    protected void FixedUpdate() {
+        if (this.readyToPush) {
+            this.rigidBody2D.velocity = new Vector2(0, 0);
+            this.rigidBody2D.drag = this.linearDrag;
+            this.rigidBody2D.AddForce(this.pushForce);
+            this.readyToPush = false;
+            this.MoveToPushedState();
+        } else if (this.state != State.Pushed) {
+            this.rigidBody2D.drag = 0;
         }
     }
 

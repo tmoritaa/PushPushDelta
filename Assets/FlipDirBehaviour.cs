@@ -11,9 +11,14 @@ public class FlipDirBehaviour : StateMachineBehaviour {
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         Monster pushable = animator.GetComponent<Monster>();
-        Vector3 scale = pushable.transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * pushable.GetCharDirForAnim();
-        pushable.transform.localScale = scale;
+        int dir = pushable.GetCharDirForAnim();
+
+        if (dir != 0) {
+            Vector3 scale = pushable.transform.localScale;
+
+            scale.x = Mathf.Abs(scale.x) * dir;
+            pushable.transform.localScale = scale;
+        }
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
