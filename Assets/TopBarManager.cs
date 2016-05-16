@@ -6,8 +6,8 @@ public class TopBarManager : MonoBehaviour {
     private TopBar topbar;
 
     private static TopBarManager instance;
-    public static TopBarManager Instance() {
-        return TopBarManager.instance;
+    public static TopBarManager Instance {
+        get { return TopBarManager.instance; }
     }
 
     public void ShowTopbar(bool show) {
@@ -15,7 +15,7 @@ public class TopBarManager : MonoBehaviour {
     }
 
     public void BackButtonPressed() {
-        SceneTransitionManager.Instance().GoToPrevScene();
+        SceneTransitionManager.Instance.GoToPrevScene();
     }
 
     void Awake() {

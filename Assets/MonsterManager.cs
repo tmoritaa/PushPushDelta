@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class MonsterManager : MonoBehaviour {
     private static MonsterManager instance;
-    public static MonsterManager Instance() {
-        return MonsterManager.instance;
+    public static MonsterManager Instance {
+        get { return MonsterManager.instance; }
     }
 
     private Dictionary<string, Monster> monsterDict = new Dictionary<string, Monster>();

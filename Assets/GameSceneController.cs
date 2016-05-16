@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameSceneController : AbstractSceneController {
     [SerializeField]
@@ -18,22 +18,16 @@ public class GameSceneController : AbstractSceneController {
 
     private GameObject pushRoot = null;
 
+    private Dictionary<string, int> capturedMonsters = new Dictionary<string, int>();
+
     public static GameSceneController instance = null;
 
-    protected override void Awake() {
-        base.Awake();
-        GameSceneController.instance = this;
-    }
+    public void Capture(Monster monster) {
+        if (!this.capturedMonsters.ContainsKey(monster.MonsterName)) {
+            this.capturedMonsters[monster.MonsterName] = 0;
+        }
 
-	// Use this for initialization
-	void Start() {
-        this.pushRoot = GameObject.Find("PushRoot");
-
-        this.StartGame();
-	}
-
-    void OnDestroy() {
-        GameSceneController.instance = null;
+        this.capturedMonsters[monster.MonsterName] += 1;
     }
 
     private void StartGame() {
@@ -43,7 +37,12 @@ public class GameSceneController : AbstractSceneController {
     }
 
     private void EndGame() {
-        SceneTransitionManager.Instance().LoadSceneAsRoot(ConstantVars.RESULT_SCENE_NAME);
+        foreach(string key in this.capturedMonsters.Keys) {
+            SceneTransitionData.Instance.AddDataObj(key);
+            SceneTransitionData.Instance.AddDataObj(this.capturedMonsters[key]);
+        }
+        
+        SceneTransitionManager.Instance.LoadSceneAsRoot(ConstantVars.RESULT_SCENE_NAME);
     }
 
     private void UpdateTimer() {
@@ -63,6 +62,22 @@ public class GameSceneController : AbstractSceneController {
         Pusher obj = GameObject.Instantiate<Pusher>(this.pusherPrefab);
         obj.transform.position = Input.mousePosition;
         obj.transform.SetParent(this.pushRoot.transform);
+    }
+
+    protected override void Awake() {
+        base.Awake();
+        GameSceneController.instance = this;
+    }
+
+    // Use this for initialization
+    void Start() {
+        this.pushRoot = GameObject.Find("PushRoot");
+
+        this.StartGame();
+    }
+
+    void OnDestroy() {
+        GameSceneController.instance = null;
     }
 
     // Update is called once per frame

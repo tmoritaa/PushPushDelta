@@ -17,13 +17,7 @@ public class JumpSpriteBehaviour : StateMachineBehaviour {
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         this.startTime = Time.fixedTime;
-        Image[] images = animator.GetComponentsInChildren<Image>();
-        foreach(Image img in images) {
-            if (img.name == "Character") {
-                this.characterObject = img.gameObject;
-            }
-        }
-
+        this.characterObject = animator.GetComponent<Monster>().MainImage.gameObject;
         this.origPos = this.characterObject.transform.localPosition;
 	}
 

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
     private static PlayerManager instance;
-    public static PlayerManager Instance() {
-        return PlayerManager.instance;
+    public static PlayerManager Instance {
+        get { return PlayerManager.instance; }
     }
 
     [SerializeField]
@@ -25,12 +25,12 @@ public class PlayerManager : MonoBehaviour {
         get { return this.capturedMonsters; }
     }
 
-    public void Capture(Monster monster) {
-        if (!this.capturedMonsters.ContainsKey(monster.MonsterName)) {
-            this.capturedMonsters[monster.MonsterName] = 0;
+    public void AddToCaptured(string monsterName, int count) {
+        if (!this.capturedMonsters.ContainsKey(monsterName)) {
+            this.capturedMonsters[monsterName] = 0;
         }
 
-        this.capturedMonsters[monster.MonsterName] += 1;
+        this.capturedMonsters[monsterName] += count;
     }
 
     void Awake() {

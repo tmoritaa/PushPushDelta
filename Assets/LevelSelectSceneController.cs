@@ -5,6 +5,6 @@ using System.Collections.Generic;
 
 public class LevelSelectSceneController : AbstractSceneController {
     public void GoToLevel(string sceneName) {
-        SceneTransitionManager.Instance().LoadSceneAsRoot(sceneName);
+        SceneTransitionManager.Instance.LoadSceneAsRoot(sceneName);
     }
 }

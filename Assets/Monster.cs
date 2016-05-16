@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public abstract class Monster : MonoBehaviour {
@@ -7,6 +8,12 @@ public abstract class Monster : MonoBehaviour {
     public string MonsterName {
         get { return this.monsterName; }
     }
+
+    [SerializeField]
+    protected Image mainImage = null;
+    public Image MainImage {
+        get { return this.mainImage; }
+    } 
 
     [SerializeField]
     protected Rigidbody2D rigidBody2D = null;
@@ -63,7 +70,7 @@ public abstract class Monster : MonoBehaviour {
     }
 
     public void Capture() {
-        PlayerManager.Instance().Capture(this);
+        GameSceneController.instance.Capture(this);
         this.destroy = true;
     }
 

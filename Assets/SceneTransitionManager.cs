@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 public class SceneTransitionManager : MonoBehaviour {
     private static SceneTransitionManager instance;
-    public static SceneTransitionManager Instance() {
-        return SceneTransitionManager.instance;
+    public static SceneTransitionManager Instance {
+        get { return SceneTransitionManager.instance; }
     }
 
     List<string> loadedScenes = new List<string>();

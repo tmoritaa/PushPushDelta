@@ -6,8 +6,8 @@ public abstract class AbstractSceneController : MonoBehaviour {
     bool showTopbar = true;
 
     protected virtual void Awake() {
-        if (TopBarManager.Instance() != null) {
-            TopBarManager.Instance().ShowTopbar(this.showTopbar);
+        if (TopBarManager.Instance != null) {
+            TopBarManager.Instance.ShowTopbar(this.showTopbar);
         }
     }
 }

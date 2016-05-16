@@ -19,8 +19,8 @@ public class TopBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.moneyText.text = "$" + PlayerManager.Instance().PlayerMoney.ToString();
+        this.moneyText.text = "$" + PlayerManager.Instance.PlayerMoney.ToString();
 
-        this.ShowBackButton(SceneTransitionManager.Instance().GetNumberOfLoadedScenes() >= 2);
+        this.ShowBackButton(SceneTransitionManager.Instance.GetNumberOfLoadedScenes() >= 2);
 	}
 }
