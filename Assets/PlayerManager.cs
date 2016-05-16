@@ -8,6 +8,11 @@ public class PlayerManager : MonoBehaviour {
         return PlayerManager.instance;
     }
 
+    [SerializeField]
+    MonsterMoneyGenerationData moneyGenerationData = null;
+
+    private Dictionary<string, float> lastMoneyAddedPerMonster = new Dictionary<string, float>();
+
     // TODO: should be saved in player prefs.
     private int playerMoney;
     public int PlayerMoney {
@@ -33,7 +38,29 @@ public class PlayerManager : MonoBehaviour {
         PlayerManager.instance = this;
     }
 
+    void Start() {
+        Dictionary<string, MonsterMoneyGenerationData.MonsterMoneyGenerationEntry> entryDict = this.moneyGenerationData.GetEntryDict();
+
+        foreach(MonsterMoneyGenerationData.MonsterMoneyGenerationEntry entry in entryDict.Values) {
+            this.lastMoneyAddedPerMonster[entry.monster.MonsterName] = Time.time;
+        }
+    }
+
     void OnDestroy() {
         PlayerManager.instance = null;
+    }
+
+    void Update() {
+        Dictionary<string, MonsterMoneyGenerationData.MonsterMoneyGenerationEntry> entryDict = this.moneyGenerationData.GetEntryDict();
+
+        foreach (string name in this.capturedMonsters.Keys) {
+            if (Time.time - this.lastMoneyAddedPerMonster[name] >= entryDict[name].duration) {
+                int count = this.capturedMonsters[name];
+
+                this.playerMoney += entryDict[name].value * count;
+
+                this.lastMoneyAddedPerMonster[name] = Time.time;
+            } 
+        }
     }
 }

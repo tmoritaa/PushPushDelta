@@ -7,9 +7,6 @@ public class MonsterDisplaySceneController : AbstractSceneController {
     [SerializeField]
     private MonsterDisplay monsterDisplayPrefab = null;
 
-    [SerializeField]
-    private float swipeMag = 10f;
-
     private GameObject monsterDisplayRoot;
 
     private List<MonsterDisplay> monsterDisplays = new List<MonsterDisplay>();
