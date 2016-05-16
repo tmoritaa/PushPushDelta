@@ -20,6 +20,9 @@
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
+# Built Files
+*.apk
+
 # =========================
 # Operating System Files
 # =========================
