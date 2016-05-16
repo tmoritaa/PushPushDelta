@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
+public class GameSceneController : AbstractSceneController {
     [SerializeField]
     private Pusher pusherPrefab = null;
 
@@ -23,10 +23,11 @@ public class GameManager : MonoBehaviour {
 
     private GameObject pushRoot = null;
 
-    public static GameManager instance = null;
+    public static GameSceneController instance = null;
 
-    void Awake() {
-        GameManager.instance = this;
+    protected override void Awake() {
+        base.Awake();
+        GameSceneController.instance = this;
     }
 
 	// Use this for initialization
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour {
 	}
 
     void OnDestroy() {
-        GameManager.instance = null;
+        GameSceneController.instance = null;
     }
 
     public void AddScore(int score) {

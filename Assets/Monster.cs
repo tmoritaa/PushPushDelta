@@ -60,7 +60,7 @@ public abstract class Monster : MonoBehaviour {
     }
 
     public void Capture() {
-        GameManager.instance.AddScore(this.score);
+        GameSceneController.instance.AddScore(this.score);
         this.destroy = true;
     }
 

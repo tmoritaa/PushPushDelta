@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ResultSceneController : MonoBehaviour {
+public class ResultSceneController : AbstractSceneController {
     [SerializeField]
     Text resultText;
 
