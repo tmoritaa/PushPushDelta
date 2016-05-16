@@ -9,15 +9,10 @@ public class GameSceneController : AbstractSceneController {
     private Pusher pusherPrefab = null;
 
     [SerializeField]
-    private Text scoreText = null;
-
-    [SerializeField]
     private Text timerText = null;
 
     [SerializeField]
     private int gameDuration = 60;
-
-    private int curScore = 0;
 
     private float gameStartTime = 0;
 
@@ -33,18 +28,12 @@ public class GameSceneController : AbstractSceneController {
 	// Use this for initialization
 	void Start() {
         this.pushRoot = GameObject.Find("PushRoot");
-        this.scoreText.text = "Score: " + this.curScore;
 
         this.StartGame();
 	}
 
     void OnDestroy() {
         GameSceneController.instance = null;
-    }
-
-    public void AddScore(int score) {
-        this.curScore += score;
-        this.scoreText.text = "Score: " + this.curScore;
     }
 
     private void StartGame() {
@@ -54,7 +43,6 @@ public class GameSceneController : AbstractSceneController {
     }
 
     private void EndGame() {
-        SceneTransitionData.Instance.AddDataObj(this.curScore);
         SceneManager.LoadScene(ConstantVars.RESULT_SCENE_NAME);
     }
 

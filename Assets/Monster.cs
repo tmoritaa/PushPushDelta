@@ -3,6 +3,12 @@ using System.Collections;
 
 public abstract class Monster : MonoBehaviour {
     [SerializeField]
+    protected string monsterName = "";
+    public string MonsterName {
+        get { return this.monsterName; }
+    }
+
+    [SerializeField]
     protected Rigidbody2D rigidBody2D = null;
 
     [SerializeField]
@@ -19,9 +25,6 @@ public abstract class Monster : MonoBehaviour {
 
     [SerializeField]
     protected float linearDrag = 10.0f;
-
-    [SerializeField]
-    protected int score = 1;
 
     [SerializeField]
     protected float breakDuration = 0;
@@ -60,7 +63,7 @@ public abstract class Monster : MonoBehaviour {
     }
 
     public void Capture() {
-        GameSceneController.instance.AddScore(this.score);
+        PlayerManager.Instance().Capture(this);
         this.destroy = true;
     }
 
