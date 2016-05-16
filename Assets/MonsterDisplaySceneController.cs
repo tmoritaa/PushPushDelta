@@ -40,8 +40,6 @@ public class MonsterDisplaySceneController : AbstractSceneController {
         Dictionary<string, Monster> monsters = MonsterManager.Instance().MonsterDict;
 
         foreach (string key in capturedMonsters.Keys) {
-            Debug.Log(key + " x" + capturedMonsters[key]);
-
             MonsterDisplay display = GameObject.Instantiate<MonsterDisplay>(this.monsterDisplayPrefab);
             display.InitWithMonster(monsters[key]);
             display.transform.SetParent(this.monsterDisplayRoot.transform, false);
