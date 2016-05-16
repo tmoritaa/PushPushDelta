@@ -16,6 +16,6 @@ public class ResultSceneController : AbstractSceneController {
     }
 
     public void GoToLevelSelect() {
-        SceneManager.LoadScene("LevelSelect");
+        SceneManager.LoadScene(ConstantVars.LEVEL_SELECT_SCENE_NAME);
     }
 }

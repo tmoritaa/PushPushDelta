@@ -4,6 +4,6 @@ using System.Collections;
 
 public class StartSceneController : AbstractSceneController {
     void LateUpdate() {
-        SceneManager.LoadScene("LevelSelect");
+        SceneManager.LoadScene(ConstantVars.MAIN_MENU_SCENE_NAME);
     }
 }

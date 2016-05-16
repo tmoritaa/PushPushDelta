@@ -55,7 +55,7 @@ public class GameSceneController : AbstractSceneController {
 
     private void EndGame() {
         SceneTransitionData.Instance.AddDataObj(this.curScore);
-        SceneManager.LoadScene("Result");
+        SceneManager.LoadScene(ConstantVars.RESULT_SCENE_NAME);
     }
 
     private void UpdateTimer() {
