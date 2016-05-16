@@ -43,7 +43,7 @@ public class GameSceneController : AbstractSceneController {
     }
 
     private void EndGame() {
-        SceneManager.LoadScene(ConstantVars.RESULT_SCENE_NAME);
+        SceneTransitionManager.Instance().LoadSceneAsRoot(ConstantVars.RESULT_SCENE_NAME);
     }
 
     private void UpdateTimer() {

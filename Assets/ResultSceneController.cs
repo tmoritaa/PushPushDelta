@@ -14,6 +14,6 @@ public class ResultSceneController : AbstractSceneController {
     }
 
     public void GoToMainMenu() {
-        SceneManager.LoadScene(ConstantVars.MAIN_MENU_SCENE_NAME);
+        SceneTransitionManager.Instance().LoadSceneAsRoot(ConstantVars.MAIN_MENU_SCENE_NAME);
     }
 }

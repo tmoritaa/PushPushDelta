@@ -25,4 +25,8 @@ public class MonsterManager : MonoBehaviour {
             this.monsterDict[monster.MonsterName] = monster;
         }
 	}
+
+    void OnDestroy() {
+        MonsterManager.instance = null;
+    }
 }

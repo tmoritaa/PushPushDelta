@@ -11,7 +11,11 @@ public class TopBarManager : MonoBehaviour {
     }
 
     public void ShowTopbar(bool show) {
-        this.topbar.Show(show);
+        this.topbar.ShowTopbar(show);
+    }
+
+    public void BackButtonPressed() {
+        SceneTransitionManager.Instance().GoToPrevScene();
     }
 
     void Awake() {
