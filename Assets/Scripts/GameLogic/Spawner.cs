@@ -31,12 +31,12 @@ public class Spawner : MonoBehaviour {
 
         float xDim = this.spawnDimension.x / 2;
         float yDim = this.spawnDimension.y / 2;
-
-        Vector3 randPos = new Vector3(Random.Range(-xDim, xDim), Random.Range(-yDim, yDim)) + this.transform.position;
-
+        
+        Vector3 randPos = new Vector3(Random.Range(-xDim, xDim), Random.Range(-yDim, yDim)) + this.transform.localPosition;
+        
         Monster spawned = GameObject.Instantiate<Monster>(spawnPrefab);
+        spawned.transform.SetParent(this.transform, false);
         spawned.transform.localPosition = randPos;
-        spawned.transform.SetParent(this.transform);
 
         this.durSinceLastSpawn = 0;
     }

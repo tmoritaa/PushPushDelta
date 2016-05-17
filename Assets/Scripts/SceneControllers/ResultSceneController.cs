@@ -34,8 +34,6 @@ public class ResultSceneController : AbstractSceneController {
             rectTrans.anchorMax = new Vector2(1, 1.0f - displayPosIdx * 0.15f);
             display.transform.SetParent(this.resultDisplayRoot.transform, false);
         }
-
-        resultText.text = "Game over man";
     }
 
     public void GoToMainMenu() {

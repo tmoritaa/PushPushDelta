@@ -60,8 +60,8 @@ public class GameSceneController : AbstractSceneController {
 
     private void GeneratePushCircle() {
         Pusher obj = GameObject.Instantiate<Pusher>(this.pusherPrefab);
+        obj.transform.SetParent(this.pushRoot.transform, false);
         obj.transform.position = Input.mousePosition;
-        obj.transform.SetParent(this.pushRoot.transform);
     }
 
     protected override void Awake() {
