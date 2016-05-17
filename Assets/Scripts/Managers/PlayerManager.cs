@@ -14,7 +14,6 @@ public class PlayerManager : MonoBehaviour {
 
     private Dictionary<string, float> lastMoneyAddedPerMonster = new Dictionary<string, float>();
 
-    // TODO: should be saved in player prefs.
     private int playerMoney;
     public int PlayerMoney {
         get { return this.playerMoney; }
@@ -32,15 +31,10 @@ public class PlayerManager : MonoBehaviour {
 
     [SerializeField]
     private MonsterBankData monsterBankData = null;
-
     private int bankLevel = 0;
     private int curBankMoney = 0;
 
     public void AddToCaptured(string monsterName, int count) {
-        if (!this.capturedMonsters.ContainsKey(monsterName)) {
-            this.capturedMonsters[monsterName] = 0;
-        }
-
         this.capturedMonsters[monsterName] = Math.Min(this.capturedMonsters[monsterName] + count, this.monsterCageData.MonsterCageEntries[this.monsterCageSizeLevels[monsterName]].maxSize);
     }
 
@@ -99,6 +93,38 @@ public class PlayerManager : MonoBehaviour {
         level += 1;
     }
 
+    public void LoadData() {
+        this.playerMoney = PlayerPrefs.GetInt(ConstantVars.PREFS_PLAYER_MONEY, 0);
+        this.bankLevel = PlayerPrefs.GetInt(ConstantVars.PREFS_BANK_LEVEL, 0);
+        this.curBankMoney = PlayerPrefs.GetInt(ConstantVars.PREFS_BANK_MONEY, 0);
+
+        Dictionary<string, Monster> monsterDict = MonsterManager.Instance.MonsterDict;
+
+        foreach(string key in monsterDict.Keys) {
+            string capKey = ConstantVars.PREFS_CAPTURED_PREFIX + key;
+            this.capturedMonsters[key] = PlayerPrefs.GetInt(capKey, 0);
+
+            string cageKey = ConstantVars.PREFS_CAGESIZE_PREFIX + key;
+            this.monsterCageSizeLevels[key] = PlayerPrefs.GetInt(cageKey, 0);
+        }
+    }
+
+    public void SaveData() {
+        PlayerPrefs.SetInt(ConstantVars.PREFS_PLAYER_MONEY, this.playerMoney);
+        PlayerPrefs.SetInt(ConstantVars.PREFS_BANK_LEVEL, this.bankLevel);
+        PlayerPrefs.SetInt(ConstantVars.PREFS_BANK_MONEY, this.curBankMoney);
+
+        foreach (string key in this.capturedMonsters.Keys) {
+            string val = ConstantVars.PREFS_CAPTURED_PREFIX + key;
+            PlayerPrefs.SetInt(val, this.capturedMonsters[key]);
+        }
+
+        foreach(string key in this.monsterCageSizeLevels.Keys) {
+            string val = ConstantVars.PREFS_CAGESIZE_PREFIX + key;
+            PlayerPrefs.SetInt(val, this.monsterCageSizeLevels[key]);
+        }
+    }
+
     void Awake() {
         DontDestroyOnLoad(this.gameObject.transform);
         PlayerManager.instance = this;
@@ -111,15 +137,23 @@ public class PlayerManager : MonoBehaviour {
             this.lastMoneyAddedPerMonster[entry.monster.MonsterName] = Time.time;
         }
 
-        // TODO: for now just init, should try to load, then init.
-        Dictionary<string, Monster> monsterDict = MonsterManager.Instance.MonsterDict;
-        foreach(string name in monsterDict.Keys) {
-            this.monsterCageSizeLevels[name] = 0;
-        }
+        LoadData();
     }
 
     void OnDestroy() {
         PlayerManager.instance = null;
+    }
+
+    void OnApplicationQuit() {
+        this.SaveData();
+    }
+
+    void OnApplicationPause(bool pauseStatus) {
+        if (pauseStatus) {
+            this.SaveData();
+        } else {
+            this.LoadData();
+        }
     }
 
     void Update() {
