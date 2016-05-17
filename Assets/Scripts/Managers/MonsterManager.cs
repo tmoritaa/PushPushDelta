@@ -16,15 +16,12 @@ public class MonsterManager : MonoBehaviour {
     void Awake() {
         MonsterManager.instance = this;
         DontDestroyOnLoad(this.gameObject.transform);
-    }
 
-	// Use this for initialization
-	void Start () {
         Monster[] monsters = Resources.LoadAll<Monster>("MonsterPrefabs");
-        foreach(Monster monster in monsters) {
+        foreach (Monster monster in monsters) {
             this.monsterDict[monster.MonsterName] = monster;
         }
-	}
+    }
 
     void OnDestroy() {
         MonsterManager.instance = null;
