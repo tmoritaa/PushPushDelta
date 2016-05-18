@@ -42,6 +42,10 @@ public class NetObject : MonoBehaviour {
         }
     }
 
+    void OnMouseDown() {
+        this.CaptureObjects();
+    }
+
     void Start() {
         this.animator = this.GetComponent<Animator>();
     }
