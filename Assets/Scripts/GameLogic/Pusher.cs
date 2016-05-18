@@ -8,6 +8,9 @@ public class Pusher : MonoBehaviour {
     private Image refCircle = null;
 
     [SerializeField]
+    private Image deadzoneCircle = null;
+
+    [SerializeField]
     private Collider2D colliderComponent = null;
 
     [SerializeField]
@@ -15,6 +18,9 @@ public class Pusher : MonoBehaviour {
 
     [SerializeField]
     private float pushForce = 50000;
+
+    [SerializeField]
+    private float minThresh = 0.35f;
 
     private List<Monster> objectsToPush = new List<Monster>();
 
@@ -27,6 +33,8 @@ public class Pusher : MonoBehaviour {
         this.startTime = Time.time;
             
         this.refCircle.transform.localScale = new Vector3(0, 0, 1);
+
+        this.deadzoneCircle.transform.localScale = new Vector3(this.minThresh, this.minThresh, 1);
     }
 
     private void UpdateGraphics() {
@@ -45,9 +53,16 @@ public class Pusher : MonoBehaviour {
             ratio = 1.0f - (ratio - 1.0f);
         }
 
-        foreach (Monster p in this.objectsToPush) {
-            if (p != null) {
-                p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
+        bool belowThresh = false;
+        if (Mathf.Abs(ratio) < this.minThresh || ratio <= 0) {
+            belowThresh = true;
+        }
+
+        if (!belowThresh) {
+            foreach (Monster p in this.objectsToPush) {
+                if (p != null) {
+                    p.Push(this.gameObject.transform.localPosition, this.pushForce * ratio);
+                }
             }
         }
 
