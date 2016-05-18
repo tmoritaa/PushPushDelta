@@ -61,7 +61,9 @@ public class GameSceneController : AbstractSceneController {
     private void GeneratePushCircle() {
         Pusher obj = GameObject.Instantiate<Pusher>(this.pusherPrefab);
         obj.transform.SetParent(this.pushRoot.transform, false);
-        obj.transform.position = Input.mousePosition;
+        Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        newPos.z = 0;
+        obj.transform.localPosition = newPos;
     }
 
     protected override void Awake() {
