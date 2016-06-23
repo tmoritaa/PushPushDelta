@@ -3,7 +3,7 @@ A mobile game prototype I made for Android in a couple of days. Might come back 
 
 ##Gameplay Notes
 The objective of the game is to capture as many monsters as possible within the time frame. You can do that by clicking on the nets when a monster is on top of it.
-You can also push monsters by holding down your finger on the screen, and waiting until the white circle is about the same size as the red circle.
+You can also push monsters by holding down your finger on the screen, and waiting until the white circle is about the same size as the red circle. This will cause an explosion at your finger, which will push the monsters away.
 
 ##Monster Types
 * Green Guys: Just walks around.
